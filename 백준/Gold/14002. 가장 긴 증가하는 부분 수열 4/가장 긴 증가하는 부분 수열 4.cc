@@ -6,24 +6,31 @@ int N, n, res, dp[1001];
 vector<int> v, temp[1001], res_v;
 int main() {
 	cin >> N;
+	// 가장 긴 길이 구하기
 	for (int i = 0; i < N; i++) {
 		cin >> n;
 		v.push_back(n);
-		temp[i].push_back(n);
+		dp[i] = 1;
 		for (int j = 0; j < v.size(); j++) {
-			if (v[i] > v[j]) {
-				if (dp[i] < dp[j] + 1) {
-					temp[i].clear();
-					temp[i] = temp[j];
-					temp[i].push_back(v[i]);
-					dp[i] = dp[j] + 1;
-				}
+			if (v[i] > v[j] && dp[i] <= dp[j]) {
+				dp[i] = dp[j] + 1;
 			}
 		}
-		if (res_v.size() < temp[i].size()) res_v = temp[i];
+		res = max(res, dp[i]);
 	}
+	// 출력
+	cout << res << "\n";
 
-	cout << res_v.size() << "\n";
+	// 가장 긴 부분수열 구하기
+	for (int i = N - 1; i >= 0; i--) {
+		if (dp[i] == res) {
+			res_v.push_back(v[i]);
+			res--;
+		}
+	}
+	reverse(res_v.begin(), res_v.end());
+
+	// 출력
 	for (int i : res_v) cout << i << " ";
 	return 0;
 }
